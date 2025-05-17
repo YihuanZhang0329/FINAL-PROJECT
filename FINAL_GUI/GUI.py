@@ -445,7 +445,6 @@ class GUI:
                 if isinstance(msg, dict):
                     action = msg.get("action")
 
-                # 处理头像更新
                     if action == "update_avatar":
                         try:
                             sender = msg["name"]
@@ -455,14 +454,13 @@ class GUI:
                             avatar_img = ImageTk.PhotoImage(img)
                             self.avatar_cache[sender] = avatar_img
                         except Exception as e:
-                            print(f"处理头像更新失败: {e}")
+                            print(f"error: {e}")
 
-                # 处理聊天消息
                     elif "from" in msg and "message" in msg:
                         sender = msg["from"]
                         content = msg["message"]
 
-                    # 如果该消息包含头像数据，则更新头像缓存
+
                         if "avatar" in msg:
                             try:
                                 from io import BytesIO
@@ -471,15 +469,15 @@ class GUI:
                                 avatar_img = ImageTk.PhotoImage(img)
                                 self.avatar_cache[sender] = avatar_img
                             except Exception as e:
-                                print(f"解析消息内头像失败: {e}")
+                                print(f"error: {e}")
 
-                    # 如果缓存中还没有这个用户头像，则使用默认头像
+
                         if sender not in self.avatar_cache:
                             self.avatar_cache[sender] = self.default_avatar
 
                         self.display_message(sender, content)
 
-        # 自己发的消息处理
+
             if self.my_msg:
                 response = self.sm.proc(self.my_msg, "")
                 self.display_message(self.sm.get_myname(), self.my_msg)
